@@ -7,7 +7,13 @@ const routes: Routes = [{
   path: 'calendar',
   component: CalendarComponent,
   data: { title: 'Calendar' }
-}];
+  },{
+    path: '',
+    redirectTo: '/calendar',
+    pathMatch: 'full'
+  }
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,10 +1,27 @@
+<div [ngSwitch]="viewMode">
 <mwl-calendar-month-view
+    *ngSwitchCase = "CalendarView.Month" 
     [viewDate]="viewDate"
     [events]="events"
     [refresh]="refresh"
-    [activeDayIsOpen]="activeDayIsOpen"
+    [activeDayIsOpen]="false"
     (dayClicked)="dayClicked($event.day)"
-    
-  >
-  <!-- (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"  ></mwl-calendar-month-view>
+
+<mwl-calendar-week-view
+    *ngSwitchCase = "CalendarView.Week" 
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    dayStartHour="9"
+    dayEndHour=17
+    weekStartsOn=1
+    [excludeDays]="excludeDays"
+    hourSegments=1
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"></mwl-calendar-week-view>
+</div>
+<button mat-button *ngIf="viewMode != CalendarView.Week" (click)="setViewMode(CalendarView.Week)">Week</button>
+<button mat-button *ngIf="viewMode != CalendarView.Month" (click)="setViewMode(CalendarView.Month)">Month</button>
+  <!-- 
   (eventTimesChanged)="eventTimesChanged($event)" -->
