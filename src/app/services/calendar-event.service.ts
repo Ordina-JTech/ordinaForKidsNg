@@ -12,6 +12,8 @@ export class CalendarEventService {
 
   constructor(private restService: RestService, private authenticationService: AuthenticationService) { }
 
+  private myEventColor = { primary: '#e98300', secondary : '' }
+  private theirEventColor = { primary: 'gray', secondary : '' }
 
   getCalendarEvents() {
     const calEvents = this.restService
@@ -22,7 +24,7 @@ export class CalendarEventService {
   createCalendarEvent(date: Date) {
     return this.restService.post("calendar_events", {
       date: date
-    })
+    });
   }
 
   deleteCalendarEvent(calendarEvent:CalendarEvent) {
@@ -35,7 +37,8 @@ export class CalendarEventService {
         start: addHours(startOfDay(databaseCalendarEvent.date), 9),
         end: addHours(startOfDay(databaseCalendarEvent.date), 15),
         title: databaseCalendarEvent.owner,
-        id: databaseCalendarEvent.id
+        id: databaseCalendarEvent.id,
+        color: (databaseCalendarEvent.owner === this.authenticationService.currentUserValue.username ? this.myEventColor : this.theirEventColor)
       }
     })
   }

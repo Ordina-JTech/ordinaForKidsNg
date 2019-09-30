@@ -6,7 +6,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarComponent, CalendarEventBookingDialog } from './calendar/calendar.component';
+import { CalendarComponent } from './calendar/calendar.component';
 import { MaterialModule } from './material.module';
 import { HttpClientModule, HTTP_INTERCEPTORS }    from '@angular/common/http';
 import { BasicAuthInterceptor } from './helpers/basic-auth.interceptor';
@@ -17,7 +17,6 @@ import { MatDialogModule } from '@angular/material/dialog';
   declarations: [
     AppComponent,
     CalendarComponent,
-    CalendarEventBookingDialog
   ],
   imports: [
     BrowserModule,
@@ -30,9 +29,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     HttpClientModule,
     MaterialModule,
     MatDialogModule
-  ],
-  entryComponents: [
-    CalendarEventBookingDialog
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
