@@ -2,26 +2,22 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.5.
 
-## Development server
+## Getting started
+- Run npm install
+- Run ng serve --open to load in browser
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Architecture
 
-## Code scaffolding
+### Routing
+Currently only Calendar is showing, Routing component has already been created and integrated for future developments. Defaults to Calendar, this should be the information page in the future
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Authentication
+User login / password is required for all REST calls to the backend. All outgoing requests are intercepted /app/helpers/basic-auth.interceptor and the local login account is added as BASIC authentication.
 
-## Build
+### Calendar
+The Angular Calendar component developed by Matt Lewis is used which is provided with a MIT license. https://mattlewis92.github.io/angular-calendar/#/kitchen-sink
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Integration with REST calls is handled in the calendar-event.service
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Sweet Alert
+Dialogs for information and confirmation uses the SweetAlert 2, https://github.com/sweetalert2/sweetalert2 , which is proveded with a MIT license. 

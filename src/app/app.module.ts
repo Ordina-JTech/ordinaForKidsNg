@@ -7,16 +7,19 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarComponent } from './calendar/calendar.component';
-import { MaterialModule } from './material.module';
+import { MaterialModule } from './helpers/material.module';
 import { HttpClientModule, HTTP_INTERCEPTORS }    from '@angular/common/http';
 import { BasicAuthInterceptor } from './helpers/basic-auth.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LoginComponent } from './login/login.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     }),
     HttpClientModule,
     MaterialModule,
-    MatDialogModule
+    MatDialogModule,
+    FormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
