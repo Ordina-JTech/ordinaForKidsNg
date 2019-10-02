@@ -14,12 +14,14 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarComponent,
     LoginComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,

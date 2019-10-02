@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication.service';
@@ -19,7 +19,9 @@ export class ErrorInterceptor implements HttpInterceptor {
             animation: false
         }
 
-        return next.handle(request).pipe(catchError(err => {
+        return next.handle(request).pipe(catchError((err:HttpErrorResponse) => {
+
+            console.log(err);
             if (err.status === 401) {
                 // auto logout if 401 response returned from api
                 this.authenticationService.logout();
@@ -29,7 +31,9 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
 
             // other type of error:
-            options.text = err.error.message;
+            // check if it a validation error of the data:
+            // 
+            options.text = err.error.message || err.error.errors;
             swal.fire(options);
 
             const error = err.error.message || err.statusText;

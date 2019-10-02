@@ -1,26 +1,57 @@
 <mat-card class="example-card">
     <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
+      <mat-card-title>User accounts</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form class="example-form">
         <table class="example-full-width" cellspacing="0">
-          <tr>
-            <td>
-              <mat-form-field class="example-full-width">
-              <input matInput placeholder="Username" [(ngModel)]="username" name="username" required>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-          <td><mat-form-field class="example-full-width">
-            <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" required>
-          </mat-form-field></td>
-        </tr></table>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                    <input matInput placeholder="First name" [(ngModel)]="userProfile.firstname" name="firstname" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Last name" [(ngModel)]="userProfile.lastname" name="lastname" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Email" [(ngModel)]="userProfile.email" name="email" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Password" [(ngModel)]="userProfile.password" type="password" name="password" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <mat-form-field  >
+                            <mat-label>Role</mat-label>
+                            <mat-select [(value)]="userProfile.userrole" >
+                              <mat-option *ngFor="let role of roles" [value]="role.value">
+                                {{role.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
       </form>
       <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button (click)="login()" color="primary">Login</button>
+      <button mat-raised-button (click)="create()" color="primary">Create user</button>
     </mat-card-actions>
 </mat-card>

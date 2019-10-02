@@ -7,5 +7,6 @@
      [active]="rla.isActive">
     {{link.label}}
   </a>
+  <a mat-tab-link *ngIf="loggedIn" (click)="logout()">Logout</a>
 </nav>
 <router-outlet></router-outlet>
