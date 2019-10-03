@@ -52,6 +52,7 @@ export class AppComponent {
 
   ngOnInit()
   {
+    this.authenticationService.logout();
     this.loadMenu(this.authenticationService.currentUserValue);
   }
 

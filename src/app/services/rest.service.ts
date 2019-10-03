@@ -15,9 +15,9 @@ export class RestService {
   getEndpoint(controller:string) {
     return `${this.getBaseUrl()}/${controller}`;
   }
-  getItemEndpoint(controller:string, id:string)
+  getItemEndpoint(controller:string, id?:string)
   {
-    return `${this.getEndpoint(controller)}/${id}`;
+    return id ? `${this.getEndpoint(controller)}/${id}` : this.getEndpoint(controller);
   }
 
   getBaseUrl() {
@@ -33,10 +33,10 @@ export class RestService {
   }
 
   delete(controller:string, id: string) {
-    return this.http.delete(this.getItemEndpoint(controller, id))
+    return this.http.delete(this.getItemEndpoint(controller, id));
   }
 
-  put(controller:string, id: string, body: Object) {
+  put(controller:string, body: Object, id?: string) {
     return this.http.put(this.getItemEndpoint(controller, id), body)
   }
 }

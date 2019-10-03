@@ -60,4 +60,16 @@ export class AuthenticationService {
     createUser(userProfile:UserProfile) {
         return this.restService.post("user", userProfile);
     }
+
+    setUser(userProfile:UserProfile) {
+        return this.restService.put("user", userProfile);
+    }
+
+    getUsers() {
+        return this.restService.get("user");
+    }
+
+    deleteUser(userProfile:UserProfile) {
+        return this.restService.delete("user", userProfile.email);
+    }
 }

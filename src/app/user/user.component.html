@@ -1,57 +1,77 @@
-<mat-card class="example-card">
+<mat-card>
     <mat-card-header>
       <mat-card-title>User accounts</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form class="example-form">
-        <table class="example-full-width" cellspacing="0">
-            <tr>
-                <td>
-                    <mat-form-field class="example-full-width">
-                    <input matInput placeholder="First name" [(ngModel)]="userProfile.firstname" name="firstname" required>
-                    </mat-form-field>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Last name" [(ngModel)]="userProfile.lastname" name="lastname" required>
-                    </mat-form-field>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Email" [(ngModel)]="userProfile.email" name="email" required>
-                    </mat-form-field>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Password" [(ngModel)]="userProfile.password" type="password" name="password" required>
-                    </mat-form-field>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <mat-form-field class="example-full-width">
-                        <mat-form-field  >
-                            <mat-label>Role</mat-label>
-                            <mat-select [(value)]="userProfile.userrole" >
-                              <mat-option *ngFor="let role of roles" [value]="role.value">
-                                {{role.viewValue}}
-                              </mat-option>
-                            </mat-select>
+        <mat-grid-list cols="2">
+            <mat-grid-tile>
+              <form style="width:100%">
+              <table cellspacing="0" style="width:100%">
+                  <tr>
+                      <td>
+                          <mat-form-field>
+                          <input matInput placeholder="First name" [(ngModel)]="userProfile.firstname" name="firstname" required>
                           </mat-form-field>
-                    </mat-form-field>
-                </td>
-            </tr>
-        </table>
-      </form>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <mat-form-field>
+                          <input matInput placeholder="Last name" [(ngModel)]="userProfile.lastname" name="lastname" required>
+                          </mat-form-field>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <mat-form-field>
+                          <input matInput placeholder="Email"  [disabled]="editMode" [(ngModel)]="userProfile.email" name="email" required>
+                          </mat-form-field>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <mat-form-field>
+                          <input matInput placeholder="Password" [(ngModel)]="userProfile.password" type="password" name="password" required>
+                          </mat-form-field>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <mat-form-field>
+                              <mat-form-field  >
+                                  <mat-label>Role</mat-label>
+                                  <mat-select [(value)]="userProfile.userrole" >
+                                    <mat-option *ngFor="let role of roles" [value]="role.value">
+                                      {{role.viewValue}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                          </mat-form-field>
+                      </td>
+                  </tr>
+              </table>
+            </form>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field>
+                    <mat-form-field  >
+                        <mat-label>Existing user</mat-label>
+                        <mat-select (selectionChange)="setUser($event)">
+                          <mat-option *ngFor="let user of users" [value]="user.email">
+                            {{user.lastname + ' ' + user.firstname + ' (' + user.email + ')'}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </mat-form-field>
+            </mat-grid-tile>
+          </mat-grid-list>
+      
       <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button (click)="create()" color="primary">Create user</button>
+      <button mat-raised-button *ngIf="!editMode" (click)="create()" color="primary">Create user</button>
+      <button mat-raised-button *ngIf="editMode" (click)="set()" color="primary">Save user</button>
+      <button mat-raised-button *ngIf="editMode" (click)="toNewUserMode()" color="primary">Create new user</button>
+      <button mat-raised-button *ngIf="editMode" (click)="delete()" color="warn">Delete user</button>
     </mat-card-actions>
 </mat-card>

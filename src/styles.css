@@ -11,3 +11,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mwl-calendar-month-cell:not(.cal-future) {
     cursor: default !important;
 }
+mat-form-field {
+    width: 80%;
+  }
+
+.mat-grid-tile .mat-figure {
+    align-items: start !important;
+}
