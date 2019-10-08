@@ -29,11 +29,17 @@ export class AppComponent {
       // any user that's logged in:
       this.navLinks.push({ path: 'calendar', label: 'Calendar' })
       this.loggedIn = true;
-        console.log(user);
 
       // admin role
-      if(user.role == 'Administrator') {
+      if(user.role === 'Administrator') {
         this.navLinks.push({ path: 'user', label: 'User accounts' })
+        this.navLinks.push({ path: 'report', label: 'Report' })
+      }
+
+      // ordina employee role
+      if(user.role === 'OrdinaEmployee')
+      {
+        this.navLinks.push({ path: 'report', label: 'Report' })
       }
 
     }
@@ -52,7 +58,8 @@ export class AppComponent {
 
   ngOnInit()
   {
-    this.authenticationService.logout();
+    // this.logout();
+    this.authenticationService.login("admin", "admin");
     this.loadMenu(this.authenticationService.currentUserValue);
   }
 

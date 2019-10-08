@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CalendarComponent } from './calendar/calendar.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
+import { ReportComponent } from './report/report.component';
 
 
 const routes: Routes = [
@@ -25,11 +26,16 @@ const routes: Routes = [
   }
   ,
   {
+    path: 'report',
+    component: ReportComponent,
+    data: {title: 'Report'}
+  }
+  ,
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
   }
-
 ];
 
 @NgModule({

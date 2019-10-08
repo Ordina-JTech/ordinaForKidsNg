@@ -28,8 +28,8 @@ export class RestService {
     return this.http.post(this.getEndpoint(controller), body);
   }
 
-  get(controller:string) {
-    return this.http.get(this.getEndpoint(controller))
+  get(controller:string, id?: string) {
+    return this.http.get(this.getItemEndpoint(controller, id))
   }
 
   delete(controller:string, id: string) {

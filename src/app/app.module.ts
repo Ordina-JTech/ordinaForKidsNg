@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { UserComponent } from './user/user.component';
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { UserComponent } from './user/user.component';
     CalendarComponent,
     LoginComponent,
     UserComponent,
+    ReportComponent,
   ],
   imports: [
     BrowserModule,

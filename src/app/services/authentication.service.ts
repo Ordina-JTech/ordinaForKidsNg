@@ -37,7 +37,7 @@ export class AuthenticationService {
         // set the initial login info, this is required for the basic-auth interceptor 
         // which will add it as basic authentication for the rest call
         const user: User = new User();
-        user.authdata = window.btoa(username + ':' + password);
+        user.authdata = window.btoa(`${username}:${password}`);
         user.username = username;
         user.password = password;
         this.restAccount = user;
