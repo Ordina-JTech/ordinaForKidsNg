@@ -1,15 +1,15 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { User } from '../model/user';
-import { environment } from 'src/environments/environment';
 import { RestService } from './rest.service';
-import { BasicAuthInterceptor } from '../helpers/basic-auth.interceptor';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+
+    /**
+     * The current user profile in use, should only be populated after a successful login
+     */
     private currentUserSubject: BehaviorSubject<User>;
     
     /**
@@ -28,47 +28,82 @@ export class AuthenticationService {
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
+    /**
+     * returns the currentUserValue
+     */
     public get currentUserValue(): User {
         return this.currentUserSubject.value;
     }
 
-    login(username: string, password: string) {
+    /**
+     * Method to validate the login credentials and set the currentuser if the login is successful.
+     * When the login response from the server fails, the logout is triggered which wipes all login info and currentUserInfo
+     * 
+     * The logout() is called from the HttpInterception method that detects a 401 response and acts accordingly.
+     * 
+     * The login() method only sets the credentials to the restAccount profile which is automatically injected as
+     * basicauth authentication on the request GET call to the backend
+     * @param username 
+     * @param password 
+     */
+    async login(username: string, password: string) {
       
         // set the initial login info, this is required for the basic-auth interceptor 
         // which will add it as basic authentication for the rest call
         const user: User = new User();
         user.authdata = window.btoa(`${username}:${password}`);
         user.username = username;
-        user.password = password;
+        user.password = null;
         this.restAccount = user;
         
 
-      this.restService.get("login").subscribe((userProfile:UserProfile) => {
+        const userProfile:UserProfile = await this.restService.get("login").toPromise();
 
+        if(userProfile === null) { return false; }
         user.role = userProfile.userrole;
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
-      })
+
+        return true;
+
     }
 
+    /**
+     * Logout the user and whipe the currentUserSubject
+     */
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
 
+    /**
+     * Create a new user based on the user profile
+     * @param userProfile
+     */
     createUser(userProfile:UserProfile) {
         return this.restService.post("user", userProfile);
     }
 
+    /**
+     * Override a user property in the user profile and returns the updated profile
+     * @param userProfile 
+     */
     setUser(userProfile:UserProfile) {
         return this.restService.put("user", userProfile);
     }
 
+    /**
+     * Return the list with users
+     */
     getUsers() {
         return this.restService.get("user");
     }
 
+    /**
+     * Remove the user from the repository
+     * @param userProfile 
+     */
     deleteUser(userProfile:UserProfile) {
         return this.restService.delete("user", userProfile.email);
     }

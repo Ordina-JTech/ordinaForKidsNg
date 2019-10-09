@@ -16,10 +16,10 @@ export class CalendarEventService {
   myEventColor = { primary: '#e98300', secondary : '' }
   theirEventColor = { primary: 'gray', secondary : '' }
 
-  getCalendarEvents():Observable<CalendarEvent[]> {
+  getCalendarEvents():Observable<DatabaseCalendarEvent[]> {
     const calEvents = this.restService
           .get("calendar_events");
-          return <Observable<CalendarEvent[]>> calEvents;
+          return <Observable<DatabaseCalendarEvent[]>> calEvents;
   }
 
   createCalendarEvent(date: Date) {
