@@ -8,13 +8,9 @@ import { RestService } from './rest.service';
 export class AuthenticationService {
 
     /**
-     * The current user profile in use, should only be populated after a successful login
+     * The BehaviorSubject emits the value of the observable
      */
     private currentUserSubject: BehaviorSubject<User>;
-    
-    /**
-     * Current user after login has been succesful. Will be observed and triggers modifications in routing etc.
-     */
     public currentUser: Observable<User>;
 
     /**

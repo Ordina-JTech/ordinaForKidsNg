@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Sort, MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { CalendarEventService } from '../services/calendar-event.service';
 
 @Component({
@@ -9,16 +9,16 @@ import { CalendarEventService } from '../services/calendar-event.service';
 })
 export class ReportComponent implements OnInit {
 
-  constructor(private calendarEventService:CalendarEventService) { }
+  constructor(private calendarEventService: CalendarEventService) { }
 
   ngOnInit() {
 
     this.loadEvents();
-    
+
   }
 
   loadEvents() {
-    this.calendarEventService.getCalendarEvents().subscribe((data:DatabaseCalendarEvent[] ) => {
+    this.calendarEventService.getCalendarDatabaseEvents().subscribe((data: DatabaseCalendarEvent[]) => {
 
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -26,9 +26,9 @@ export class ReportComponent implements OnInit {
   }
 
   displayedColumns: string[] = ['id', 'owner', 'date'];
-  dataSource;
+  dataSource: MatTableDataSource<DatabaseCalendarEvent>;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  
+
 }

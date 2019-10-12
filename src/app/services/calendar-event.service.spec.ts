@@ -12,28 +12,28 @@ import { of } from 'rxjs';
 import { isDate } from 'util';
 
 class MockRestService {
-  get(controller:string):Observable<CalendarEvent[]> {
+  get(controller: string): Observable<CalendarEvent[]> {
     return of<CalendarEvent[]>([{
       start: new Date(),
       title: "Some event"
-    }, 
+    },
     {
       start: new Date(),
       title: "Some other event"
     }]);
   }
 
-  post(controller:string, data:{date}):Observable<boolean> {
+  post(controller: string, data: { date }): Observable<boolean> {
     return of<boolean>(controller === 'calendar_events' && data && data.date && isDate(data.date));
   }
 
-  delete(controller:string, id:string):Observable<string> {
+  delete(controller: string, id: string): Observable<string> {
     return of<string>(`${controller}/${id}`);
   }
 }
 
 class MockAuthService {
-  public currentUserValue = { "username" : "testuser"}
+  public currentUserValue = { "username": "testuser" }
 }
 
 describe('CalendarEventService', () => {
@@ -42,7 +42,7 @@ describe('CalendarEventService', () => {
   let authService: MockAuthService;
   let controller: string = 'calendar_events';
 
-  let databaseCalendarEvents:DatabaseCalendarEvent[] = [{
+  let databaseCalendarEvents: DatabaseCalendarEvent[] = [{
     date: new Date(2019, 10, 31),
     owner: "testuser",
     id: "1"
@@ -58,7 +58,7 @@ describe('CalendarEventService', () => {
     TestBed.configureTestingModule({
       providers: [
         CalendarEventService,
-        
+
         // The CalendarEventService uses 2 DIs: 
         // The RestService and the AuthenticationService
         // to make a shallow unit test for the CalendarEventService, both will be mocked 
@@ -82,23 +82,23 @@ describe('CalendarEventService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getCalendarEvents()', () => {
+  describe('getCalendarDatabaseEvents()', () => {
     it('should retrieve the calendar events', async () => {
 
-      let events = await service.getCalendarEvents().toPromise();
+      let events = await service.getCalendarDatabaseEvents().toPromise();
       expect(events.length).toBe(2);
-    }) 
+    })
   })
 
   describe('createCalendarEvent()', () => {
     it('should post a body that contains a date to the correct controller', async () => {
       // post a new date to the mockRestService that will validate the controller and if the JSON Object is correct
       expect(await service.createCalendarEvent(new Date()).toPromise()).toBe(true);
-    }) 
+    })
   })
 
   describe('deleteCalendarEvent()', () => {
-    it('should send a delete call to the right endpoint using the rest controller', async() => {
+    it('should send a delete call to the right endpoint using the rest controller', async () => {
       // post a delete command to the mockRestService that will validate the controller and if the endpoint is correct
       let controller_id = await service.deleteCalendarEvent({ start: new Date(), id: 1, title: "New event" }).toPromise();
       expect(controller_id).toBe(`${controller}/1`);
@@ -106,23 +106,23 @@ describe('CalendarEventService', () => {
   })
 
   describe('toCalendarEvents()', () => {
-    
-    let calendarEvents:CalendarEvent[];
+
+    let calendarEvents: CalendarEvent[];
 
     it('should return the same number of events as were put in', () => {
-      calendarEvents  = service.toCalendarEvents(databaseCalendarEvents);
+      calendarEvents = service.toCalendarEvents(databaseCalendarEvents);
       expect(calendarEvents.length).toBe(databaseCalendarEvents.length);
     })
 
     it('should persist the owner as title and the event for mapping id', () => {
-      calendarEvents  = service.toCalendarEvents(databaseCalendarEvents);
+      calendarEvents = service.toCalendarEvents(databaseCalendarEvents);
       databaseCalendarEvents.forEach(databaseCalendarEvent => {
         expect(calendarEvents.find(calendarEvent => calendarEvent.id === databaseCalendarEvent.id).title).toBe(databaseCalendarEvent.owner);
       });
     })
 
     it('should create a specific color for the event if the current user is logged in', () => {
-      calendarEvents  = service.toCalendarEvents(databaseCalendarEvents);
+      calendarEvents = service.toCalendarEvents(databaseCalendarEvents);
       expect(calendarEvents.find(calendarEvent => calendarEvent.title === authService.currentUserValue.username).color).toBe(service.myEventColor);
       expect(calendarEvents.find(calendarEvent => calendarEvent.title !== authService.currentUserValue.username).color).toBe(service.theirEventColor);
     });
@@ -153,11 +153,11 @@ describe('CalendarEventService', () => {
         events: service.toCalendarEvents(databaseCalendarEvents)
       }
       expect(service.hasEventOnDate(day, true)).toBe(true);
-    }) 
+    })
 
     it('should return false if no events are present on that day', () => {
-      expect(service.hasEventOnDate(<Day>{ events: []})).toBe(false);
+      expect(service.hasEventOnDate(<Day>{ events: [] })).toBe(false);
     });
   });
-  
+
 });

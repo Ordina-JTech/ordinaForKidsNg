@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { RestService } from './rest.service';
-import { startOfDay, addHours } from 'date-fns';
+import { startOfDay, addHours, endOfDay } from 'date-fns';
 import { CalendarEvent } from 'angular-calendar';
 import { AuthenticationService } from './authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 
 @Injectable({
@@ -13,13 +13,19 @@ export class CalendarEventService {
 
   constructor(private restService: RestService, private authenticationService: AuthenticationService) { }
 
-  myEventColor = { primary: '#e98300', secondary : '' }
-  theirEventColor = { primary: 'gray', secondary : '' }
+  myEventColor = { primary: '#e98300', secondary: '' }
+  theirEventColor = { primary: 'gray', secondary: '' }
 
-  getCalendarEvents():Observable<DatabaseCalendarEvent[]> {
+  getCalendarDatabaseEvents(): Observable<DatabaseCalendarEvent[]> {
     const calEvents = this.restService
-          .get("calendar_events");
-          return <Observable<DatabaseCalendarEvent[]>> calEvents;
+      .get("calendar_events");
+    return <Observable<DatabaseCalendarEvent[]>>calEvents;
+  }
+
+  async getCalendarEvents() {
+    const calendarDatabaseEvents = await this.restService.get("calendar_events").toPromise();
+
+    return this.toCalendarEvents(<DatabaseCalendarEvent[]>calendarDatabaseEvents);
   }
 
   createCalendarEvent(date: Date) {
@@ -28,7 +34,7 @@ export class CalendarEventService {
     });
   }
 
-  deleteCalendarEvent(calendarEvent:CalendarEvent) {
+  deleteCalendarEvent(calendarEvent: CalendarEvent) {
     return this.restService.delete("calendar_events", calendarEvent.id.toString());
   }
 
@@ -36,7 +42,7 @@ export class CalendarEventService {
    * Converts the data from database calendar events to UI calendar events
    * @param databaseCalendarEvents 
    */
-  toCalendarEvents(databaseCalendarEvents:DatabaseCalendarEvent[]):CalendarEvent[] {
+  toCalendarEvents(databaseCalendarEvents: DatabaseCalendarEvent[]): CalendarEvent[] {
     return databaseCalendarEvents.map(databaseCalendarEvent => {
       return {
         start: addHours(startOfDay(databaseCalendarEvent.date), 9),
@@ -54,8 +60,8 @@ export class CalendarEventService {
    * @param day 
    * @param onlyCurrentUser - defaults to true
    */
-  eventsOnDate(day:Day, onlyCurrentUser:boolean=true):CalendarEvent[] {
-    return day.events.filter((event:CalendarEvent) => {
+  eventsOnDate(day: Day, onlyCurrentUser: boolean = true): CalendarEvent[] {
+    return day.events.filter((event: CalendarEvent) => {
       return !onlyCurrentUser || event.title === this.authenticationService.currentUserValue.username;
     });
   }
@@ -66,7 +72,19 @@ export class CalendarEventService {
    * @param day 
    * @param onlyCurrentUser - defaults to false
    */
-  hasEventOnDate(day:Day, onlyCurrentUser:boolean=false):boolean {
+  hasEventOnDate(day: Day, onlyCurrentUser: boolean = false): boolean {
     return this.eventsOnDate(day, onlyCurrentUser).length > 0;
+  }
+
+  /**
+   * Returns the calendar events that take place on the provided day
+   * @param day 
+   * @param events 
+   */
+  filterEventsForDate(day: Day, events: CalendarEvent[]): CalendarEvent[] {
+    return events.filter(event => {
+      startOfDay(event.start) <= startOfDay(day.date) &&
+        endOfDay(event.end) >= endOfDay(day.date);
+    })
   }
 }

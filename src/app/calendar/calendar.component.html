@@ -9,24 +9,18 @@
         </div>
     </mat-grid-tile>
     <mat-grid-tile>
-        <div>
+        <div id='monthTitle'>
             {{ viewDate.toLocaleString('default', { month: 'long'}) }} - {{ viewDate.getFullYear() }}
         </div>
     </mat-grid-tile>
     <mat-grid-tile>
         <div>
-                {{ user.username }}
+            {{ user.username }}
         </div>
     </mat-grid-tile>
 </mat-grid-list>
-<mwl-calendar-month-view
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    [activeDayIsOpen]="false"
-    (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="eventClicked($event.event)"
-    [excludeDays]="excludeDays">
+<mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh" [activeDayIsOpen]="false"
+    (dayClicked)="dayClicked($event.day)" (eventClicked)="eventClicked($event.event)" [excludeDays]="excludeDays">
 </mwl-calendar-month-view>
 
 <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
