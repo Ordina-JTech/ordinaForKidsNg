@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { AuthenticationService } from './services/authentication.service';
-import { AppRoutingModule } from './app-routing.module';
 import { User } from './model/user';
 import { Router } from '@angular/router';
 
@@ -13,37 +12,36 @@ export class AppComponent {
   title = 'ordinaForKids';
   loggedIn = false;
   navLinks = [];
-  constructor(private authenticationService: AuthenticationService, private router:Router) {
-    
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
+
     this.authenticationService.currentUser.subscribe(newUser => {
       this.loadMenu(newUser)
     })
 
   }
 
-  loadMenu(user:User) {
-    
+  loadMenu(user: User) {
+
     this.navLinks = [];
 
-    if(user) {
+    if (user) {
       // any user that's logged in:
       this.navLinks.push({ path: 'calendar', label: 'Calendar' })
       this.loggedIn = true;
 
       // admin role
-      if(user.role === 'Administrator') {
+      if (user.role === 'Administrator') {
         this.navLinks.push({ path: 'user', label: 'User accounts' })
         this.navLinks.push({ path: 'report', label: 'Report' })
       }
 
       // ordina employee role
-      if(user.role === 'OrdinaEmployee')
-      {
+      if (user.role === 'OrdinaEmployee') {
         this.navLinks.push({ path: 'report', label: 'Report' })
       }
 
     }
-    else{
+    else {
       this.loggedIn = false;
       this.navLinks.push(
         { path: 'login', label: 'Login' },
@@ -56,10 +54,13 @@ export class AppComponent {
     this.router.navigate(['login']);
   }
 
-  ngOnInit()
-  {
-    // this.logout();
-    this.authenticationService.login("admin", "admin");
+  ngOnInit() {
+    if (isDevMode()) {
+      this.authenticationService.login("admin", "admin");
+    } else {
+      this.logout();
+    }
+
     this.loadMenu(this.authenticationService.currentUserValue);
   }
 
